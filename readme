@@ -1,0 +1,208 @@
+To implement **M-Pesa payments** and display donations **only when the payment is successful**, follow these steps:  
+
+### **Steps to Implement M-Pesa Payment & Track Successful Donations:**
+1. **Use M-Pesa STK Push API** to send a payment request.  
+2. **Confirm payment** using M-Pesa’s callback URL.  
+3. **Store successful transactions** in the database.  
+4. **Fetch and display only paid donations**.  
+
+---
+
+## **Updated Donate Page with M-Pesa Integration**
+### **Frontend (React Native or React)**
+```jsx
+import { useState } from "react";
+import axios from "axios";
+
+export default function Donate() {
+  const [donations, setDonations] = useState([]);
+  const [form, setForm] = useState({ name: "", amount: "", phone: "", method: "mpesa" });
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.name || !form.amount || !form.phone) return alert("Fill all fields");
+
+    setLoading(true);
+    
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/mpesa/donate/", form);
+      alert(response.data.message);
+      
+      if (response.data.success) {
+        setDonations([...donations, response.data.donation]);
+      }
+    } catch (error) {
+      alert("Payment failed. Try again.");
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-16 p-6">
+      <section>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Donate</h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300">
+          Your support helps us continue our mission. Pay via M-Pesa or other options!
+        </p>
+      </section>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Donation Form */}
+        <section className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Make a Donation</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              placeholder="Your Name"
+              className="w-full p-3 border rounded-md dark:bg-gray-700 dark:text-white"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+            <input
+              type="number"
+              placeholder="Amount (Ksh)"
+              className="w-full p-3 border rounded-md dark:bg-gray-700 dark:text-white"
+              value={form.amount}
+              onChange={(e) => setForm({ ...form, amount: e.target.value })}
+              required
+            />
+            <input
+              type="text"
+              placeholder="M-Pesa Phone Number (07xxxxxxxx)"
+              className="w-full p-3 border rounded-md dark:bg-gray-700 dark:text-white"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              required
+            />
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md"
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Donate Now"}
+            </button>
+          </form>
+        </section>
+
+        {/* Donations List */}
+        <section className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Recent Donations</h2>
+          {donations.length > 0 ? (
+            <ul className="space-y-2">
+              {donations.map((donation, index) => (
+                <li key={index} className="p-4 border rounded-md dark:bg-gray-700 dark:text-white">
+                  <strong>{donation.name}</strong> donated 
+                  <span className="text-green-600"> Ksh {donation.amount}</span> via {donation.method}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-600 dark:text-gray-400">No donations made yet.</p>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}
+```
+---
+
+## **Backend (Django) - M-Pesa STK Push Implementation**
+### **1. Install Dependencies**
+Run:
+```bash
+pip install requests djangorestframework
+```
+
+### **2. Add M-Pesa API Logic in Django**
+Create **`views.py`**:
+```python
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from .models import Donation
+
+MPESA_API_URL = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+MPESA_ACCESS_TOKEN_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+CONSUMER_KEY = "your_consumer_key"
+CONSUMER_SECRET = "your_consumer_secret"
+BUSINESS_SHORTCODE = "your_shortcode"
+PASSKEY = "your_passkey"
+CALLBACK_URL = "https://yourdomain.com/api/mpesa/callback/"
+
+@csrf_exempt
+def mpesa_donate(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        phone = data["phone"]
+        amount = int(data["amount"])
+        name = data["name"]
+
+        access_token = get_mpesa_access_token()
+        headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+        
+        payload = {
+            "BusinessShortCode": BUSINESS_SHORTCODE,
+            "Password": generate_password(),
+            "Timestamp": generate_timestamp(),
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": BUSINESS_SHORTCODE,
+            "PhoneNumber": phone,
+            "CallBackURL": CALLBACK_URL,
+            "AccountReference": "Donation",
+            "TransactionDesc": f"Donation by {name}"
+        }
+
+        response = requests.post(MPESA_API_URL, json=payload, headers=headers)
+        response_data = response.json()
+
+        if "ResponseCode" in response_data and response_data["ResponseCode"] == "0":
+            return JsonResponse({"success": True, "message": "Payment request sent to M-Pesa."})
+        else:
+            return JsonResponse({"success": False, "message": "Payment failed."})
+
+    return JsonResponse({"success": False, "message": "Invalid request."})
+
+def get_mpesa_access_token():
+    response = requests.get(MPESA_ACCESS_TOKEN_URL, auth=(CONSUMER_KEY, CONSUMER_SECRET))
+    return response.json()["access_token"]
+
+def generate_timestamp():
+    from datetime import datetime
+    return datetime.now().strftime("%Y%m%d%H%M%S")
+
+def generate_password():
+    import base64
+    return base64.b64encode(f"{BUSINESS_SHORTCODE}{PASSKEY}{generate_timestamp()}".encode()).decode()
+```
+
+---
+
+### **3. Update Django URLs**
+In **`urls.py`**:
+```python
+from django.urls import path
+from .views import mpesa_donate
+
+urlpatterns = [
+    path("api/mpesa/donate/", mpesa_donate, name="mpesa_donate"),
+]
+```
+
+---
+
+### **How This Works**
+✅ **Frontend collects donation details**  
+✅ **M-Pesa STK Push API prompts payment**  
+✅ **Django backend verifies payment**  
+✅ **Successful donations are added to the list**  
+
+🔹 **Next Step:** Store successful payments in the database and verify them via M-Pesa callback.  
+
+Want to implement a real-time **M-Pesa verification system**? Let me know! 🚀

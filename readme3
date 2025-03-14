@@ -1,0 +1,235 @@
+To handle this **multi-step application form** with a **Django backend**, we'll follow these steps:  
+
+### 1️⃣ **Set Up Django Backend**  
+- Create a Django project and app  
+- Define the application model  
+- Register it in the Django admin panel  
+- Set up an API to receive form submissions from the React frontend  
+
+---
+
+### **Step 1: Create a Django Project and App**
+Run these commands:  
+```bash
+django-admin startproject nntc_backend
+cd nntc_backend
+python manage.py startapp applications
+```
+
+---
+
+### **Step 2: Define the Application Model**  
+In `applications/models.py`:  
+
+```python
+from django.db import models
+
+class Application(models.Model):
+    COURSE_LEVELS = [
+        ('Certificate', 'Certificate'),
+        ('Diploma', 'Diploma'),
+        ('Degree', 'Degree'),
+    ]
+
+    MODE_OF_STUDY = [
+        ('Day', 'Day'),
+        ('Evening', 'Evening'),
+        ('Weekend', 'Weekend'),
+        ('Virtual', 'Virtual'),
+        ('Distance', 'Distance'),
+    ]
+
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15)
+    nationality = models.CharField(max_length=50)
+    id_number = models.CharField(max_length=20, unique=True)
+    occupation = models.CharField(max_length=100)
+    kcse_grade = models.CharField(max_length=10)
+    preferred_course = models.CharField(max_length=100)
+    course_level = models.CharField(max_length=20, choices=COURSE_LEVELS, default="Certificate")
+    start_date = models.DateField()
+    mode_of_study = models.CharField(max_length=20, choices=MODE_OF_STUDY, default="Day")
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.preferred_course}"
+```
+
+Then, run:  
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+### **Step 3: Register Model in Django Admin**  
+In `applications/admin.py`:  
+```python
+from django.contrib import admin
+from .models import Application
+
+@admin.register(Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ("first_name", "last_name", "email", "phone_number", "preferred_course", "submitted_at")
+    search_fields = ("first_name", "last_name", "email", "phone_number", "id_number")
+    list_filter = ("course_level", "mode_of_study")
+
+```
+
+Now, create a superuser to access the admin panel:  
+```bash
+python manage.py createsuperuser
+```
+Then log in at `http://127.0.0.1:8000/admin/`.
+
+---
+
+### **Step 4: Set Up API Endpoint to Receive Applications**  
+In `applications/serializers.py`:  
+```python
+from rest_framework import serializers
+from .models import Application
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = "__all__"
+```
+
+In `applications/views.py`:  
+```python
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Application
+from .serializers import ApplicationSerializer
+
+@api_view(["POST"])
+def submit_application(request):
+    serializer = ApplicationSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Application submitted successfully!"}, status=201)
+    return Response(serializer.errors, status=400)
+
+@api_view(["GET"])
+def list_applications(request):
+    applications = Application.objects.all()
+    serializer = ApplicationSerializer(applications, many=True)
+    return Response(serializer.data)
+```
+
+In `applications/urls.py`:  
+```python
+from django.urls import path
+from .views import submit_application, list_applications
+
+urlpatterns = [
+    path("submit/", submit_application, name="submit-application"),
+    path("applications/", list_applications, name="list-applications"),
+]
+```
+
+Then, **add these URLs** to `nntc_backend/urls.py`:  
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api/", include("applications.urls")),
+]
+```
+
+---
+
+### **Step 5: Connect React Form to Django API**
+Update `handleSubmit` in **React Form (`ApplicationForm.js`)**:  
+
+```javascript
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/submit/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+            alert("Application submitted successfully!");
+            setFormData({ // Reset form
+                firstName: "",
+                middleName: "",
+                lastName: "",
+                email: "",
+                phoneNumber: "",
+                nationality: "",
+                idNumber: "",
+                occupation: "",
+                kcseGrade: "",
+                preferredCourse: "",
+                courseLevel: "Certificate",
+                startDate: "",
+                modeOfStudy: "Day",
+            });
+            setStep(1); // Reset to first step
+        } else {
+            alert("Error submitting application.");
+        }
+    } catch (error) {
+        console.error("Submission error:", error);
+    }
+};
+```
+
+---
+
+### **Final Steps**
+1. Start the Django server:  
+   ```bash
+   python manage.py runserver
+   ```
+2. Run your React app and **submit a test application**.  
+3. Check applications in **Django Admin Panel**.  
+
+🚀 **Done!** Your application form is now fully connected to the backend! 🎉
+
+
+
+import React, { useState } from "react";
+
+const schools = [
+  { name: "School of Business", id: "business" },
+  { name: "School of Cosmetology", id: "cosmetology" },
+  { name: "School of Computer Science and ICT", id: "ict" },
+  { name: "School of Medicine and Nursing", id: "medicine" },
+  { name: "School of Hospitality, Food & Beverage", id: "hospitality" },
+  { name: "School of Accounting", id: "accounting" }
+];
+
+const SchoolDropdown = ({ onSelect }) => {
+  const [selectedSchool, setSelectedSchool] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedSchool(event.target.value);
+    onSelect(event.target.value); // Pass selected school ID to parent component
+  };
+
+  return (
+    <select value={selectedSchool} onChange={handleChange}>
+      <option value="">Select a School</option>
+      {schools.map((school) => (
+        <option key={school.id} value={school.id}>
+          {school.name}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+export default SchoolDropdown;
