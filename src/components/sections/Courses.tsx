@@ -86,8 +86,8 @@ export default function Courses() {
                     Apply Now
                   </Link>
                   <a
-                    href="/brochure.pdf"
-                    download="College_Brochure.pdf"
+                    href="/bronchure.pdf"
+                    download="NNTC_Bronchure.pdf"
                     className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
                   >
                     <FaFileDownload />
