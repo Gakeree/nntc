@@ -93,9 +93,9 @@ export default function Menu() {
         </ul>
 
         {/* Enroll Button */}
-        <NavLink to="/apply" className="hidden md:block bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-700">
-          ENROLL NOW →
-        </NavLink>
+        <NavLink to="/apply" className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-700 block text-center">
+                ENROLL NOW →
+              </NavLink>
 
         {/* Mobile Menu Button */}
         <button className="md:hidden text-gray-800 text-2xl" onClick={() => setMenuOpen(!menuOpen)}>

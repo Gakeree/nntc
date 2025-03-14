@@ -19,8 +19,9 @@ const Home = () => (
     <WhyNorth />
     <About />
     <Courses />
-    <Contact />
     <Gallery />
+    <Contact />
+    
     <ScrollToTopButton />
   </>
 );
