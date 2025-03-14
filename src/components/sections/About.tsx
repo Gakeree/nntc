@@ -1,6 +1,6 @@
 import React from "react";
 import { FaGraduationCap, FaChalkboardTeacher, FaSchool } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function About() {
   return (
@@ -44,12 +44,12 @@ export default function About() {
 
           {/* Call-to-Action */}
           <div className="mt-6">
-            <NavLink
+            <Link
               to="/apply"
               className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all"
             >
               Enroll Now
-            </NavLink>
+            </Link>
           </div>
         </div>
 

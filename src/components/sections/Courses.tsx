@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaBookOpen, FaClock, FaMoneyBillWave, FaFileDownload, FaExclamationCircle } from "react-icons/fa";
 import { schools, courses } from "../data/Coursesdata"; // ✅ Importing external data
 
@@ -79,12 +79,12 @@ export default function Courses() {
 
                 {/* Apply & Brochure Buttons */}
                 <div className="mt-6 flex justify-between">
-                  <NavLink
+                  <Link
                     to="/apply"
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-all"
                   >
                     Apply Now
-                  </NavLink>
+                  </Link>
                   <a
                     href="/brochure.pdf"
                     download="College_Brochure.pdf"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { FaPhone, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
 import { motion } from "framer-motion";
 import logo from "../../assets/logo.png";
@@ -90,12 +90,13 @@ export default function Menu() {
               Contact Us
             </NavLink>
           </li>
-        </ul>
 
-        {/* Enroll Button */}
-        <NavLink to="/apply" className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-700 block text-center">
+          <NavLink to="/apply" className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-700 block text-center">
                 ENROLL NOW →
               </NavLink>
+        </ul>
+
+        
 
         {/* Mobile Menu Button */}
         <button className="md:hidden text-gray-800 text-2xl" onClick={() => setMenuOpen(!menuOpen)}>
@@ -147,9 +148,9 @@ export default function Menu() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/apply" className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-700 block text-center">
+              <Link to="/apply" className="bg-blue-900 text-white px-6 py-2 rounded-md hover:bg-blue-700 block text-center">
                 ENROLL NOW →
-              </NavLink>
+              </Link>
             </li>
           </ul>
         </motion.div>
