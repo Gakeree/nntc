@@ -137,3 +137,7 @@ function Footer() {
 }
 
 export default Footer;
+
+git add package.json
+git commit -m "Fix build script by removing tsc"
+git push origin main

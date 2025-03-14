@@ -1,6 +1,7 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
+import { NavLink } from "react-router-dom";
 import { FaGraduationCap, FaDownload } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -43,12 +44,12 @@ const Hero: React.FC = () => {
               {/* Overlay Text & Button */}
               <div className="absolute inset-0 flex flex-col items-center  text-center px-6   bg-black/50  z-20">
               <h1 className=" text-white text-4xl md:text-6xl font-bold mt-12 text-center md:text-left leading-tight">{slide.text}</h1>
-              <div className="flex flex-col md:flex-row gap-4 mt-6">
+              <div className="flex flex-col md:flex-row gap-4 mt-6 sticky">
         {/* Enroll Now Button */}
-        <a href="/apply" className="flex items-center gap-2 px-6 py-3 bg-[#FFA500] text-white font-semibold uppercase rounded-md shadow-md hover:bg-[#FF8C00] transition">
+        <NavLink to="/apply" className="flex items-center gap-2 px-6 py-3 bg-[#FFA500] text-white font-semibold uppercase rounded-md shadow-md hover:bg-[#FF8C00] transition">
           <FaGraduationCap />
           Enroll Now
-        </a>
+        </NavLink>
 
         {/* Download Admission Letter Button */}
         <button className="flex items-center gap-2 px-6 py-3 bg-yellow-500 text-black font-semibold uppercase rounded-md shadow-md hover:bg-yellow-600 transition">
