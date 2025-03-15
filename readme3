@@ -233,3 +233,304 @@ const SchoolDropdown = ({ onSelect }) => {
 };
 
 export default SchoolDropdown;
+
+
+Got it! Here's how we'll structure the Django backend for your React application form:  
+
+### **Plan for Django Backend**  
+✅ **Model Setup** – Define a model to store application details.  
+✅ **API Endpoints** – Create API views to handle form submissions.  
+✅ **Validation & Error Handling** – Ensure valid data is saved.  
+✅ **Authentication (if needed)** – Secure the admin dashboard.  
+✅ **Email/SMS Notifications** – Notify applicants or admins.  
+✅ **Admin Dashboard** – Use Django Admin to view applications.  
+
+---
+
+### **1️⃣ Setting Up the Django Project**  
+Create a new Django project and app:  
+```bash
+django-admin startproject backend
+cd backend
+django-admin startapp applications
+```
+Add `'applications'` to `INSTALLED_APPS` in `settings.py`.
+
+---
+
+### **2️⃣ Define the Application Model**  
+Inside `applications/models.py`:  
+```python
+from django.db import models
+
+class Application(models.Model):
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    resume = models.FileField(upload_to="resumes/", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.full_name
+```
+Run migrations:  
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+### **3️⃣ Create API Views for Form Submission**  
+Inside `applications/views.py`:  
+```python
+from rest_framework import generics
+from .models import Application
+from .serializers import ApplicationSerializer
+
+class ApplicationCreateView(generics.CreateAPIView):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
+```
+
+---
+
+### **4️⃣ Serializer for Data Validation**  
+Inside `applications/serializers.py`:  
+```python
+from rest_framework import serializers
+from .models import Application
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = '__all__'
+```
+
+---
+
+### **5️⃣ URL Routing for API**  
+Inside `applications/urls.py`:  
+```python
+from django.urls import path
+from .views import ApplicationCreateView
+
+urlpatterns = [
+    path('submit/', ApplicationCreateView.as_view(), name='application-submit'),
+]
+```
+Include this in `backend/urls.py`:  
+```python
+from django.urls import path, include
+
+urlpatterns = [
+    path('api/', include('applications.urls')),
+]
+```
+
+---
+
+### **6️⃣ Admin Dashboard to View Applications**  
+Inside `applications/admin.py`:  
+```python
+from django.contrib import admin
+from .models import Application
+
+@admin.register(Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'phone', 'created_at')
+    search_fields = ('full_name', 'email')
+```
+Run:  
+```bash
+python manage.py createsuperuser
+```
+Then, log in at `/admin` to view applications.
+
+---
+
+### **7️⃣ Connecting Django Backend to React Frontend**  
+In React, submit form data to:  
+```javascript
+fetch('http://127.0.0.1:8000/api/submit/', {
+    method: 'POST',
+    body: formData,
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+```
+
+---
+
+This sets up the backend **to receive form submissions and manage applications via Django Admin.**  
+Let me know if you need **authentication, email notifications, or additional features!** 
+
+
+Got it! We'll update the Django backend to match these fields and ensure smooth handling of the application data.  
+
+---
+
+### **1️⃣ Define the Application Model**  
+Inside `applications/models.py`:  
+```python
+from django.db import models
+
+class Application(models.Model):
+    COURSE_LEVEL_CHOICES = [
+        ('Certificate', 'Certificate'),
+        ('Diploma', 'Diploma'),
+        ('Degree', 'Degree'),
+    ]
+
+    STUDY_MODE_CHOICES = [
+        ('Full-time', 'Full-time'),
+        ('Part-time', 'Part-time'),
+        ('Online', 'Online'),
+    ]
+
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15)
+    nationality = models.CharField(max_length=100)
+    id_number = models.CharField(max_length=20, unique=True)
+
+    secondary_school = models.CharField(max_length=255)
+    kcse_grade = models.CharField(max_length=5)
+    preferred_course = models.CharField(max_length=255)
+    course_level = models.CharField(max_length=20, choices=COURSE_LEVEL_CHOICES, default='Certificate')
+    start_date = models.DateField()
+    mode_of_study = models.CharField(max_length=20, choices=STUDY_MODE_CHOICES)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.preferred_course}"
+```
+
+Run migrations:  
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+---
+
+### **2️⃣ Serializer for Validation**  
+Inside `applications/serializers.py`:  
+```python
+from rest_framework import serializers
+from .models import Application
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = '__all__'
+
+    def validate_phone_number(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Phone number must contain only digits.")
+        return value
+```
+
+---
+
+### **3️⃣ API View for Handling Form Submission**  
+Inside `applications/views.py`:  
+```python
+from rest_framework import generics
+from .models import Application
+from .serializers import ApplicationSerializer
+
+class ApplicationCreateView(generics.CreateAPIView):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
+```
+
+---
+
+### **4️⃣ URL Routing for API**  
+Inside `applications/urls.py`:  
+```python
+from django.urls import path
+from .views import ApplicationCreateView
+
+urlpatterns = [
+    path('submit/', ApplicationCreateView.as_view(), name='application-submit'),
+]
+```
+Include this in `backend/urls.py`:  
+```python
+from django.urls import path, include
+
+urlpatterns = [
+    path('api/', include('applications.urls')),
+]
+```
+
+---
+
+### **5️⃣ Admin Dashboard for Viewing Applications**  
+Inside `applications/admin.py`:  
+```python
+from django.contrib import admin
+from .models import Application
+
+@admin.register(Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email', 'phone_number', 'preferred_course', 'start_date')
+    search_fields = ('first_name', 'last_name', 'email', 'id_number')
+```
+
+---
+
+### **6️⃣ Connecting the React Form to the Backend**  
+In your React form, send data to the Django backend:  
+```javascript
+const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const formData = {
+        firstName,
+        middleName,
+        lastName,
+        email,
+        phoneNumber,
+        nationality,
+        idNumber,
+        secondarySchool,
+        kcseGrade,
+        preferredCourse,
+        courseLevel,
+        startDate,
+        modeOfStudy,
+    };
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/submit/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+        console.log("Application submitted:", data);
+    } catch (error) {
+        console.error("Error submitting application:", error);
+    }
+};
+```
+
+---
+
+This setup will:  
+✅ Store applications in Django  
+✅ Validate fields like phone number and email  
+✅ Allow React to submit applications  
+✅ Provide an admin dashboard to view applications  
+
+Would you like **email/SMS notifications** for applicants or admin alerts? 🚀

@@ -21,7 +21,7 @@ const ApplicationForm = () => {
     phoneNumber: "",
     nationality: "",
     idNumber: "",
-    occupation: "",
+     
     SecondarySchool: "",
     kcseGrade: "",
 
@@ -106,7 +106,7 @@ const ApplicationForm = () => {
       phoneNumber: "",
       nationality: "",
       idNumber: "",
-      occupation: "",
+       
       SecondarySchool: "",
       kcseGrade: "",
       preferredCourse: "",
