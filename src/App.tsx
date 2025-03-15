@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, HashRouter } from "react-router-dom";
 
 import Layout from "./components/layout/Layout";
 import ScrollToTopButton from "./components/common/ScrollToTopButton";
@@ -42,7 +42,7 @@ const ApplyPage = () => <ApplicationForm />;
 
 const App = () => {
   return (
-    <Router>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/about" element={<Layout><AboutPage /></Layout>} />
@@ -51,7 +51,7 @@ const App = () => {
         <Route path="/apply" element={<Layout><ApplyPage /></Layout>} />
         <Route path="/admission" element={<Layout><Admission /></Layout>} />
       </Routes>
-    </Router>
+    </HashRouter>
   );
 };
 
