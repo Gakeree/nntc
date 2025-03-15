@@ -45,9 +45,9 @@ function Footer() {
           {/* Contact Info */}
           <div>
             <h3 className="text-xl font-semibold mb-4 text-red-600">Contact Info</h3>
-            <p className="text-gray-400">Address: 123 College Ave, City, Country</p>
-            <p className="text-gray-400">Email: info@college.com</p>
-            <p className="text-gray-400">Phone: (123) 456-7890</p>
+            <p className="text-gray-400">Nyeri North Technical College, Karatina, Nyeri</p>
+            <p className="text-gray-400">nyerinorthtech@gmail.com</p>
+            <p className="text-gray-400">Phone: 0702578844</p>
           </div>
 
           {/* Social Media */}
@@ -58,7 +58,7 @@ function Footer() {
               <FaFacebook className="text-xl" />
               </a>
               <a href="#" className="text-gray-400 hover:text-yellow-500">
-              <FaFacebook className="text-xl" />
+              <FaTwitter className="text-xl" />
               </a>
               <a href="#" className="text-gray-400 hover:text-yellow-500">
               <FaLinkedin className="text-xl" />
