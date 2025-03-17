@@ -101,18 +101,18 @@ const Contact = () => {
 
         {/* Contact Info */}
         <div className="bg-gray-800 p-8 rounded-xl shadow-lg space-y-6">
-          <h3 className="text-2xl font-semibold text-blue-400">Contact Details</h3>
+          <h3 className="text-2xl font-semibold text-green-700">Contact Details</h3>
 
           <div className="flex items-center space-x-4">
-            <FaMapMarkerAlt className="text-blue-500 text-3xl" />
+            <FaMapMarkerAlt className="text-green-700 text-3xl"/>
             <span className="text-lg">Kibaki Street, Karatina Town</span>
           </div>
           <div className="flex items-center space-x-4">
-            <FaPhone className="text-blue-500 text-3xl" />
+            <FaPhone className="text-green-700 text-3xl"/>
             <span className="text-lg">0702578844</span>
           </div>
           <div className="flex items-center space-x-4">
-            <FaEnvelope className="text-blue-500 text-3xl" />
+            <FaEnvelope className="text-green-700 text-3xl" />
             <span className="text-lg">nyerinorthtech@gmail.com</span>
           </div>
 

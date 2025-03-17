@@ -148,7 +148,7 @@ const ApplicationForm = () => {
                 name="firstName"
                 value={formData.firstName}
                 placeholder="First Name"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -159,7 +159,7 @@ const ApplicationForm = () => {
                 name="middleName"
                 value={formData.middleName}
                 placeholder="Middle Name"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -170,7 +170,7 @@ const ApplicationForm = () => {
                 name="lastName"
                 value={formData.lastName}
                 placeholder="Last Name"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -181,7 +181,7 @@ const ApplicationForm = () => {
                 name="nationality"
                 value={formData.nationality}
                 placeholder="Nationality"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -210,7 +210,7 @@ const ApplicationForm = () => {
                 name="email"
                 value={formData.email}
                 placeholder="Email"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-yellow-500"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -222,7 +222,7 @@ const ApplicationForm = () => {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 placeholder="0737429222"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-yellow-500"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -234,7 +234,7 @@ const ApplicationForm = () => {
                 name="idNumber"
                 value={formData.idNumber}
                 placeholder="ID Number (if available)"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-yellow-500"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
               />
 
@@ -269,7 +269,7 @@ const ApplicationForm = () => {
                 name="SecondarySchool"
                 value={formData.SecondarySchool}
                 placeholder="Secondary School attended"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-green-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -280,7 +280,7 @@ const ApplicationForm = () => {
                 name="kcseGrade"
                 value={formData.kcseGrade}
                 placeholder="KCSE Grade"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-green-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -292,7 +292,7 @@ const ApplicationForm = () => {
                 name="preferredCourse"
                 value={formData.preferredCourse}
                 placeholder="Preferred Course"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-green-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
@@ -315,7 +315,7 @@ const ApplicationForm = () => {
                 type="date"
                 name="startDate"
                 value={formData.startDate}
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-green-600"
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               />
