@@ -7,8 +7,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 // Import images properly
-import slide1 from "../../assets/slide1.jpeg";
-import slide2 from "../../assets/slide2.jpeg";
+import slide1 from "../../assets/slide1.webp"
+import slide2 from "../../assets/slide2.webp"
 import slide3 from "../../assets/slide3.jpg";
 import slide4 from "../../assets/slide4.jpg";
 
@@ -52,10 +52,13 @@ const Hero: React.FC = () => {
         </NavLink>
 
         {/* Download Admission Letter Button */}
-        <button className="flex items-center gap-2 px-6 py-3 bg-yellow-500 text-black font-semibold uppercase rounded-md shadow-md hover:bg-yellow-600 transition">
+                  <a
+                    href="/application_Form.pdf"
+                    download="NNTC_Application_Letter.pdf"
+                    className="flex items-center gap-2 px-6 py-3 bg-yellow-500 text-black font-semibold uppercase rounded-md shadow-md hover:bg-yellow-600 transition">
           <FaDownload />
           Download Application  Letter
-        </button>
+        </a>
       </div>
               </div>
             </div>
