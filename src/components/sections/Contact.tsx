@@ -39,14 +39,14 @@ const Contact = () => {
   return (
     <div id="contact" className="bg-gray-900 text-white py-16 px-4 md:px-8">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-4xl font-bold mb-6 text-blue-400">Get in Touch</h2>
+        <h2 className="text-4xl font-bold mb-6 text-green-400">Get in Touch</h2>
         <p className="text-gray-300 mb-8 text-lg">We'd love to hear from you! Reach out through any of these channels.</p>
       </div>
 
       <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
         {/* Contact Form */}
         <div className="bg-gray-800 p-8 rounded-xl shadow-lg">
-          <h3 className="text-2xl font-semibold mb-4 text-blue-400">Send us a message</h3>
+          <h3 className="text-2xl font-semibold mb-4 text-green-400">Send us a message</h3>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="name" className="block text-gray-300 mb-2 font-medium">Your Name</label>
@@ -88,7 +88,7 @@ const Contact = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition flex items-center justify-center"
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition flex items-center justify-center"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -122,7 +122,7 @@ const Contact = () => {
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-400 text-3xl transition transform hover:scale-110"
+              className="text-green-500 hover:text-green-400 text-3xl transition transform hover:scale-110"
             >
               <FaFacebook />
             </a>
@@ -130,7 +130,7 @@ const Contact = () => {
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-400 text-3xl transition transform hover:scale-110"
+              className="text-green-500 hover:text-green-400 text-3xl transition transform hover:scale-110"
             >
               <FaTwitter />
             </a>
@@ -138,7 +138,7 @@ const Contact = () => {
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-400 text-3xl transition transform hover:scale-110"
+              className="text-green-500 hover:text-green-400 text-3xl transition transform hover:scale-110"
             >
               <FaInstagram />
             </a>
@@ -146,7 +146,7 @@ const Contact = () => {
               href="#"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-400 text-3xl transition transform hover:scale-110"
+              className="text-green-500 hover:text-green-400 text-3xl transition transform hover:scale-110"
             >
               <FaLinkedin />
             </a>

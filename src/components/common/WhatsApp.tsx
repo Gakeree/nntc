@@ -11,7 +11,7 @@ const FloatingWhatsAppButton = () => {
     <div className="fixed bottom-7 right-5 flex flex-col items-end">
       <select
         onChange={(e) => setMessage(e.target.value)}
-        className="mb-2 p-2 border rounded-md"
+        className="mb-2 p-2 border rounded-md  bg-white dark:bg-gray-800 dark:text-white"
       >
         <option value="Hello, I would like to get more information about the college.">
           General Inquiry

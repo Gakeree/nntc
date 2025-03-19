@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 // Import FontAwesome icons
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa';
 
 function Footer() {
   const [email, setEmail] = useState('');
 
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  // const scrollToSection = (id: string) => {
+  //   const section = document.getElementById(id);
+  //   if (section) {
+  //     section.scrollIntoView({ behavior: 'smooth' });
+  //   }
+  // };
 
   const handleSubscribe = () => {
     // Add email subscription logic here
@@ -33,12 +34,12 @@ function Footer() {
           <div>
             <h3 className="text-xl font-semibold mb-4 text-green-600">Quick Links</h3>
             <ul>
-              <li><button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="cursor-pointer hover:text-green-600">Home</button></li>
-              <li><button onClick={() => scrollToSection('admission')} className="cursor-pointer hover:text-white text-gray-400">Admission & College Life</button></li>
-              <li><button onClick={() => scrollToSection('about')} className="cursor-pointer hover:text-white text-gray-400">About Us</button></li>
-              <li><button onClick={() => scrollToSection('courses')} className="cursor-pointer hover:text-white text-gray-400">Courses</button></li>
-              <li><button onClick={() => scrollToSection('gallery')} className="cursor-pointer hover:text-white text-gray-400">Gallery</button></li>
-              <li><button onClick={() => scrollToSection('contact')} className="cursor-pointer hover:text-white text-gray-400">Contact Us</button></li>
+              <li><NavLink to="/" className="cursor-pointer hover:text-green-600">Home</NavLink></li>
+              <li><NavLink to="/Admission"  className="cursor-pointer hover:text-white text-gray-400">Admission & College Life</NavLink></li>
+              <li><NavLink to="/about" className="cursor-pointer hover:text-white text-gray-400">About Us</NavLink></li>
+              <li><NavLink to="/courses" className="cursor-pointer hover:text-white text-gray-400">Courses</NavLink></li>
+              <li><NavLink to="/gallery" className="cursor-pointer hover:text-white text-gray-400">Gallery</NavLink></li>
+              <li><NavLink  to="/contact" className="cursor-pointer hover:text-white text-gray-400">Contact Us</NavLink></li>
             </ul>
           </div>
 

@@ -38,6 +38,9 @@ const ContactPage = () => <Contact />;
 // Application Page
 const ApplyPage = () => <ApplicationForm />;
 
+//gallery page
+const GalleryPage
+=()=> <Gallery />
  
 
 const App = () => {
@@ -50,6 +53,7 @@ const App = () => {
         <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
         <Route path="/apply" element={<Layout><ApplyPage /></Layout>} />
         <Route path="/admission" element={<Layout><Admission /></Layout>} />
+        <Route path="/gallery" element={<Layout><GalleryPage /></Layout>} />
       </Routes>
     </HashRouter>
   );
