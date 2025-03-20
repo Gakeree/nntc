@@ -52,13 +52,13 @@ const Hero: React.FC = () => {
           Enroll Now
         </NavLink>
 
-        {/* Download Admission Letter Button */}
+        {/* Download Fee Structure Button */}
                   <a
-                    href="/application_Form.pdf"
-                    download="NNTC_Application_Letter.pdf"
+                    href="/FeeStructure.pdf"
+                    download="FeeStructure.pdf"
                     className="flex items-center gap-2 px-6 py-3 bg-yellow-500 text-black font-semibold uppercase rounded-md shadow-md hover:bg-yellow-600 transition">
           <FaDownload />
-          Download Application  Letter
+          Download Fee Structure
         </a>
       </div>
               </div>

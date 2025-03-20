@@ -3,6 +3,29 @@ import { motion } from "framer-motion";
 import React from "react";
 
 
+const gradeToCourseLevels = {
+  "A": ["Artisan", "Certificate", "Diploma"],
+  "A-": ["Artisan", "Certificate", "Diploma"],
+  "B+": ["Artisan", "Certificate", "Diploma"],
+  "B": ["Artisan", "Certificate", "Diploma"],
+  "B-": ["Artisan", "Certificate", "Diploma"],
+  "C+": ["Artisan", "Certificate", "Diploma"],
+  "C": ["Artisan", "Certificate", "Diploma"],
+  "C-": ["Artisan", "Certificate", "Diploma"],
+  "D+": ["Artisan", "Certificate"],
+  "D": ["Artisan", "Certificate"],
+  "D-": ["Artisan"],
+  "E": ["Artisan"]
+};
+
+const availableCourses = {
+  "Artisan": ["ICT", "Food and Bevearage", "Tourism", "Catering"],
+  "Certificate": ["Business Management", "Sales and Marketing", "Human Resource", "C.A.M.S", "ICT", "Food and Bevearage", "Tourism", "Catering", "Cosmetology", "Beauty & Hair Dressing", "CareGiving", "Home Care Management", "Nursing Assistant"],
+  "Diploma": ["Business Management", "Sales and Marketing", "Human Resource", "C.A.M.S", "ICT", "Food and Bevearage", "Tourism", "Catering", "Cosmetology", "Beauty & Hair Dressing"],
+
+};
+
+
 
 
 // Regex for email validation
@@ -21,7 +44,7 @@ const ApplicationForm = () => {
     phoneNumber: "",
     nationality: "",
     idNumber: "",
-     
+
     SecondarySchool: "",
     kcseGrade: "",
 
@@ -37,8 +60,28 @@ const ApplicationForm = () => {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "kcseGrade") {
+      const allowedLevels = gradeToCourseLevels[value] || ["Certificate"];
+      setFormData({
+        ...formData,
+        kcseGrade: value,
+        courseLevel: allowedLevels[0],  // Set default level
+        preferredCourse: availableCourses[allowedLevels[0]][0], // Default first course
+      });
+    }
+
+    if (name === "courseLevel") {
+      setFormData({
+        ...formData,
+        courseLevel: value,
+        preferredCourse: availableCourses[value][0] || "",
+      });
+    }
   };
+
   const handleNext = () => {
     if (step === 1) {
       // Check if any required field in step 1 is empty
@@ -89,7 +132,7 @@ const ApplicationForm = () => {
   };
 
 
-   
+
 
   const handlePrevious = () => setStep((prev) => prev - 1);
 
@@ -106,7 +149,7 @@ const ApplicationForm = () => {
       phoneNumber: "",
       nationality: "",
       idNumber: "",
-       
+
       SecondarySchool: "",
       kcseGrade: "",
       preferredCourse: "",
@@ -275,39 +318,42 @@ const ApplicationForm = () => {
               />
 
               <label htmlFor="kcseGrade" className="block text-gray-700">KCSE Grade</label>
-              <input
-                type="text"
+              <select
                 name="kcseGrade"
                 value={formData.kcseGrade}
-                placeholder="KCSE Grade"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
-                required
-              />
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
+              >
+                <option value="">Select Grade</option>
+                {Object.keys(gradeToCourseLevels).map((grade) => (
+                  <option key={grade} value={grade}>{grade}</option>
+                ))}
+              </select>
 
 
               <label htmlFor="preferredCourse" className="block text-gray-700">Preferred Course</label>
-              <input
-                type="text"
+              <select
                 name="preferredCourse"
                 value={formData.preferredCourse}
-                placeholder="Preferred Course"
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
-                required
-              />
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
+              >
+                {availableCourses[formData.courseLevel]?.map((course) => (
+                  <option key={course} value={course}>{course}</option>
+                ))}
+              </select>
+
 
               <label htmlFor="courseLevel" className="block text-gray-700">Course Level</label>
               <select
                 name="courseLevel"
                 value={formData.courseLevel}
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-green-600"
                 onChange={handleChange}
-                required
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
               >
-                <option value="Artisan">Artisan</option>
-                <option value="Certificate">Certificate</option>
-                <option value="Diploma">Diploma</option>
+                {gradeToCourseLevels[formData.kcseGrade]?.map((level) => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
               </select>
 
               <label htmlFor="startDate" className="block text-gray-700">Start Date</label>
@@ -324,7 +370,7 @@ const ApplicationForm = () => {
               <select
                 name="modeOfStudy"
                 value={formData.modeOfStudy}
-                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-green-600"
+               className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
                 onChange={handleChange}
                 required
               >
@@ -342,27 +388,26 @@ const ApplicationForm = () => {
                   Back
                 </button>
                 <button
-  type="button"
-  onClick={handleSubmit}
-  disabled={
-    !formData.SecondarySchool ||
-    !formData.kcseGrade ||
-    !formData.preferredCourse ||
-    !formData.startDate ||
-    !formData.modeOfStudy
-  }
-  className={`bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition ${
-    !formData.SecondarySchool ||
-    !formData.kcseGrade ||
-    !formData.preferredCourse ||
-    !formData.startDate ||
-    !formData.modeOfStudy
-      ? "opacity-50 cursor-not-allowed"
-      : ""
-  }`}
->
-  Submit
-</button>
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={
+                    !formData.SecondarySchool ||
+                    !formData.kcseGrade ||
+                    !formData.preferredCourse ||
+                    !formData.startDate ||
+                    !formData.modeOfStudy
+                  }
+                  className={`bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition ${!formData.SecondarySchool ||
+                    !formData.kcseGrade ||
+                    !formData.preferredCourse ||
+                    !formData.startDate ||
+                    !formData.modeOfStudy
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                    }`}
+                >
+                  Submit
+                </button>
 
 
               </div>
