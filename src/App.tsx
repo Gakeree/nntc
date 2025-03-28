@@ -8,7 +8,7 @@ import WhyNorth from "./components/sections/WhyNorth";
 import About from "./components/sections/About";
 import Courses from "./components/sections/Courses";
 import Contact from "./components/sections/Contact";
-import Gallery from "./components/sections/Gallery";
+// import Gallery from "./components/sections/Gallery";
 import Admission from "./components/sections/Admission";
 import ApplicationForm from "./components/sections/ApplicationForm";
 
@@ -19,7 +19,7 @@ const Home = () => (
     <WhyNorth />
     <About />
     <Courses />
-    <Gallery />
+    {/* <Gallery /> */}
     <Contact />
     
     <ScrollToTopButton />
@@ -39,8 +39,8 @@ const ContactPage = () => <Contact />;
 const ApplyPage = () => <ApplicationForm />;
 
 //gallery page
-const GalleryPage
-=()=> <Gallery />
+// const GalleryPage
+// =()=> <Gallery />
  
 
 const App = () => {
@@ -53,7 +53,7 @@ const App = () => {
         <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
         <Route path="/apply" element={<Layout><ApplyPage /></Layout>} />
         <Route path="/admission" element={<Layout><Admission /></Layout>} />
-        <Route path="/gallery" element={<Layout><GalleryPage /></Layout>} />
+        {/* <Route path="/gallery" element={<Layout><GalleryPage /></Layout>} /> */}
       </Routes>
     </HashRouter>
   );

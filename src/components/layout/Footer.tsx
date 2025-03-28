@@ -38,7 +38,7 @@ function Footer() {
               <li><NavLink to="/Admission"  className="cursor-pointer hover:text-white text-gray-400">Admission & College Life</NavLink></li>
               <li><NavLink to="/about" className="cursor-pointer hover:text-white text-gray-400">About Us</NavLink></li>
               <li><NavLink to="/courses" className="cursor-pointer hover:text-white text-gray-400">Courses</NavLink></li>
-              <li><NavLink to="/gallery" className="cursor-pointer hover:text-white text-gray-400">Gallery</NavLink></li>
+              {/* <li><NavLink to="/gallery" className="cursor-pointer hover:text-white text-gray-400">Gallery</NavLink></li> */}
               <li><NavLink  to="/contact" className="cursor-pointer hover:text-white text-gray-400">Contact Us</NavLink></li>
             </ul>
           </div>

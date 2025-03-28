@@ -80,11 +80,11 @@ export default function Menu() {
               Courses
             </NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/gallery" className="hover:text-green-600">
               Gallery
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink to="/contact" className="hover:text-green-600">
               Contact Us
@@ -137,11 +137,11 @@ export default function Menu() {
                 Courses
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink to="/gallery" className="hover:text-green-600">
                 Gallery
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink to="/contact" className="hover:text-green-600">
                 Contact Us
