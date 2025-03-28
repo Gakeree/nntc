@@ -43,6 +43,7 @@ const ApplicationForm = () => {
     courseLevel: "Certificate",
     startDate: "",
     modeOfStudy: "",
+    paymentNumber:"",
     paymentConfirmed: false, // New field to track payment status
   });
 
@@ -150,72 +151,118 @@ const ApplicationForm = () => {
   //   }
   // };
 
-
-  const handlePayment = async () => {
-    if (!formData.phoneNumber.match(/^\d{10}$/)) {
-      alert("Enter a valid 10-digit phone number");
-      return;
-    }
-  
-    // Simulating an async API call with a delay
-    alert("Simulating M-Pesa payment request...");
-  
-    setTimeout(() => {
-      const success = Math.random() > 0.2; // 80% chance of success, 20% failure
-  
-      if (success) {
-        alert("M-Pesa Payment request sent to your phone!");
-        setFormData((prevData) => ({ ...prevData, paymentConfirmed: true }));
-      } else {
-        alert("Payment failed! Try again.");
-      }
-    }, 2000); // Simulate network delay of 2 seconds
-  };
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!formData.paymentConfirmed) {
-      alert("Please complete the payment before submitting the form.");
-      return;
-    }
-  
+   // Step 1: Handle Payment
+   const handlePayment = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/apply/", formData, {
-        headers: {
-          "Content-Type": "application/json",
-          
-        },
+      const response = await axios.post("http://127.0.0.1:8000/api/mpesa-payment/", {
+        phone_number: formData.paymentNumber,
+        amount: 1000, // Application fee
       });
-  
-      if (response.status === 201) {
-        alert("Application submitted successfully!");
-        // Reset form (optional)
-        setFormData({
-              firstName: "",
-              middleName: "",
-              lastName: "",
-              email: "",
-              phoneNumber: "",
-              nationality: "",
-              idNumber: "",
-              SecondarySchool: "",
-              kcseGrade: "",
-              preferredCourse: "",
-              courseLevel: "Certificate",
-              startDate: "",
-              modeOfStudy: "",
-              paymentConfirmed: false,
-          // Reset relevant fields if needed
-        });
+
+      if (response.status === 200) {
+        alert("STK Push sent. Complete the payment on your phone.");
+        // Listen for confirmation or handle callback appropriately
+        setFormData({ ...formData, paymentConfirmed: true });
       }
     } catch (error) {
-      console.error("Error submitting application:", error);
-      alert("An error occurred while submitting. Please try again.");
+      console.error(error);
+      alert("Payment failed. Try again.");
     }
-
-    setStep(1);
   };
+
+
+  // const handlePayment = async () => {
+  //   if (!formData.phoneNumber.match(/^\d{10}$/)) {
+  //     alert("Enter a valid 10-digit phone number");
+  //     return;
+  //   }
+  
+  //   // Simulating an async API call with a delay
+  //   alert("Simulating M-Pesa payment request...");
+  
+  //   setTimeout(() => {
+  //     const success = Math.random() > 0.2; // 80% chance of success, 20% failure
+  
+  //     if (success) {
+  //       alert("M-Pesa Payment request sent to your phone!");
+  //       setFormData((prevData) => ({ ...prevData, paymentConfirmed: true }));
+  //     } else {
+  //       alert("Payment failed! Try again.");
+  //     }
+  //   }, 2000); // Simulate network delay of 2 seconds
+  // };
+
+
+  // Handle form submission
+// Handle form submission
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    // Map camelCase to snake_case for Django compatibility
+    const payload = JSON.stringify({
+      first_name: formData.firstName,
+      middle_name: formData.middleName,
+      last_name: formData.lastName,
+      email: formData.email,
+      phone_number: formData.phoneNumber,
+      nationality: formData.nationality,
+      id_number: formData.idNumber,
+      secondary_school: formData.SecondarySchool,
+      kcse_grade: formData.kcseGrade,
+      preferred_course: formData.preferredCourse,
+      course_level: formData.courseLevel,
+      start_date: formData.startDate,
+      mode_of_study: formData.modeOfStudy,
+      payment_confirmed: formData.paymentConfirmed,
+    });
+
+    // Send data to backend
+    const response = await axios.post(
+      "http://localhost:8000/api/applications/",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // Reset form on success
+    if (response.status === 200 || response.status === 201) {
+      alert("Application submitted successfully!");
+      setFormData({
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        nationality: "",
+        idNumber: "",
+        SecondarySchool: "",
+        kcseGrade: "",
+        preferredCourse: "",
+        courseLevel: "Certificate",
+        startDate: "",
+        modeOfStudy: "",
+        paymentNumber:"",
+        paymentConfirmed: false,
+      });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    if (error.response) {
+      alert("Failed to submit application: " + JSON.stringify(error.response.data));
+    } else {
+      alert("Unexpected error occurred. Please try again.");
+    }
+  }
+  setStep(1);
+};
+
+
+  
+  
   
   
  
@@ -374,6 +421,18 @@ const ApplicationForm = () => {
                   <option key={grade} value={grade}>{grade}</option>
                 ))}
               </select>
+
+              <label htmlFor="courseLevel" className="block text-gray-700">Course Level</label>
+              <select
+                name="courseLevel"
+                value={formData.courseLevel}
+                onChange={handleChange}
+                className="border p-3 rounded-md w-full mb-3 focus:ring-2 focus:ring-red-600 bg-white dark:bg-gray-800 dark:text-white"
+              >
+                {gradeToCourseLevels[formData.kcseGrade]?.map((level) => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </select>
               
               <label htmlFor="preferredCourse" className="block text-gray-700">Preferred Course</label>
               <select
@@ -447,12 +506,20 @@ const ApplicationForm = () => {
           {step === 4 && (
             <div>
               <h3 className="text-lg font-semibold mb-3 text-blue-600">Payment</h3>
-              <p className="mb-4">Please complete the payment to finalize your application.</p>
+              <p className="mb-4">Enter your payment number to complete your application.</p>
+              <input
+                type="tel"
+                name="paymentNumber"
+                onChange={handleChange}
+                className="w-full p-2 mb-4 border rounded"
+                placeholder="254705896124"
+                required
+              />
               <button
                 type="button"
                 onClick={handlePayment}
                 disabled={formData.paymentConfirmed}
-                className={`bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition ${formData.paymentConfirmed ? "opacity-50 cursor-not-allowed" : ""}`}
+                className={`bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition ${formData.paymentConfirmed ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 {formData.paymentConfirmed ? "Payment Confirmed" : "Pay with M-Pesa"}
               </button>
@@ -460,14 +527,14 @@ const ApplicationForm = () => {
                 <button
                   type="button"
                   onClick={handlePrevious}
-                  className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition"
+                  className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
                   disabled={!formData.paymentConfirmed}
-                  className={`bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition ${!formData.paymentConfirmed ? "opacity-50 cursor-not-allowed" : ""}`}
+                  className={`bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition ${!formData.paymentConfirmed ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   Submit Application
                 </button>
