@@ -1,0 +1,41 @@
+import axios from "axios";
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!formData.paymentConfirmed) {
+    alert("Please complete the payment before submitting the form.");
+    return;
+  }
+
+  try {
+    const response = await axios.post("http://127.0.0.1:8000/apply/", formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 201) {
+      alert("Application submitted successfully!");
+      setFormData({
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        nationality: "",
+        idNumber: "",
+        SecondarySchool: "",
+        kcseGrade: "",
+        preferredCourse: "",
+        courseLevel: "Certificate",
+        startDate: "",
+        modeOfStudy: "",
+        paymentConfirmed: false,
+      });
+      setStep(1);
+    }
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    alert("Failed to submit the application. Please try again.");
+  }
+};
